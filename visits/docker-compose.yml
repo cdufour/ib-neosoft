@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  redis-app: # dns name pour l'application node
+    image: 'redis'
+    # ports:
+    #   - "6379:6379"
+
+  # ajout d'un service mysql
+  mysql-app:
+    image: 'mysql:5.7'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      #- /var/lib/mysql # volume anonyme, perd ses données  après un "down"
+      - db_vol:/var/lib/mysql # volume nommé
+    
+  admin-db:
+    image: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      PMA_HOST: mysql-app
+    
+  node-app:
+    build: . # cible le Dockefile situé dans le dossier courant
+    depends_on:
+      - mysql-app
+    ports:
+      - "4001:8081"
+    restart: always
+
+# section volumes pour options
+volumes:
+  db_vol:

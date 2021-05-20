@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+
+  # Si nécessaire, utiliser docker secrets pour les db credentials
+  # https://dzone.com/articles/introduction-to-docker-secrets
+  # https://youtu.be/SHD8Bl0jEfE
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: exo3
+
+  web:
+    depends_on:
+      - db
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 5000:5000
+    restart: always
+

@@ -1,0 +1,1 @@
+docker build -t exo1:v1 .

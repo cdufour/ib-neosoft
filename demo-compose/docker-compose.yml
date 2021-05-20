@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+
+  my-redis:
+    image: redis:5-alpine
+    ports:
+      - 6379:6379
+  
+  my-apache:
+    image: httpd:2.4-alpine
+    ports:
+      - 8080:80
+
+  my-simpleweb:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 3000:3000
