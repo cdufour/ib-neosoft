@@ -1,0 +1,13 @@
+version: '3'
+services:
+
+  redis-app: # dns name pour l'application node
+    image: 'redis'
+
+  node-app:
+    build: . # cible le Dockefile (dossier courant)
+    depends_on:
+      - mysql-app
+    ports:
+      - "4001:8081"
+    restart: always
