@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce # volume monté en lecture/écriture
+  resources:
+    requests:
+      storage: 2Gi

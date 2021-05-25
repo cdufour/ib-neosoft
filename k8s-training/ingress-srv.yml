@@ -1,0 +1,28 @@
+# Le composant ingress offre un endoint unique pour le client
+# et permet d'analyser l'url requise par le client
+# afin de rediriger le trafic sur un service cible
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  rules:
+  - host: habit.com # ne peut pas être localhost
+    http:
+      paths:
+      - path: /api/?(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: server-srv
+            port: 
+              number: 3000
+      - path: /(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: client-srv
+            port:
+              number: 3000
