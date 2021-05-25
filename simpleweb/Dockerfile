@@ -3,6 +3,6 @@ FROM node:14.17-alpine
 COPY index.js .
 COPY package.json .
 
-RUN npm i
+RUN npm install
 
 CMD ["node", "index.js"]

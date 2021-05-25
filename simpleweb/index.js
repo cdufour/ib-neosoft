@@ -3,9 +3,10 @@ import express from 'express';
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('coucou je vais bien');
+  res.send('Coucou, je suis un serveur nodejs/express');
 })
 
+
 app.listen(3000, () => {
-  console.log('Server running...');
+  console.log('Serveur écoutant le port 3000...');
 })

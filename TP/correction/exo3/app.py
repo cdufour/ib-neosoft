@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import mysql.connector
 
 app = Flask(__name__)
@@ -25,3 +25,9 @@ def index():
     
     return name
   return render_template('index.html')
+
+@app.route("/user", methods=['GET'])
+def user_all():
+  cur.execute("SELECT * FROM user")
+  users = cur.fetchall()
+  return jsonify(users)
