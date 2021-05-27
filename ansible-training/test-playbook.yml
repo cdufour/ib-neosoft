@@ -1,0 +1,51 @@
+- 
+  name: Test Playbook
+  hosts: group1
+  #become: yes # toutes les tâches sont exec en tant que root
+  
+  tasks:
+    - name: Test ping
+      ping:
+
+    - name: Touch as vagrant
+      command: "touch /tmp/touch_test"
+
+    - name: Touch as root
+      become: yes # commande exécutée en tant que root
+      command: "touch /tmp/touch_test2"
+
+    - name: Echo example
+      command: "echo Coucou depuis Ansible"
+      register: cmd_out
+    
+    # - debug: var=cmd_out
+    # - debug: msg='{{cmd_out.stdout}}'
+
+    - name: Shell example
+      shell: "echo Coucou depuis Ansible > /tmp/shell_example"
+
+    - name: Change owner
+      become: yes
+      file:
+        path: /tmp/shell_example
+        owner: "root"
+
+    - name: Command with env var
+      command: touch $DIR/$FILENAME
+      environment:
+        DIR: /tmp
+        FILENAME: cmd_env_example
+
+    - name: Command with env var 2
+      shell: touch $FILENAME
+      args:
+        chdir: $DIR
+      environment:
+        DIR: /tmp
+        FILENAME: cmd_env_example_2
+
+    - name: Apt example (apache)
+      become: yes
+      apt:
+        name: apache2
+        state: absent

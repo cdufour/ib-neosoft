@@ -1,0 +1,2 @@
+# How to fix the /usr/bin/python: not found error in Ansible
+https://www.toptechskills.com/ansible-tutorials-courses/how-to-fix-usr-bin-python-not-found-error-tutorial/

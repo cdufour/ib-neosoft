@@ -1,0 +1,44 @@
+-
+  name: Apache deploy
+  hosts: all
+  become: yes
+
+  vars:
+    users: ['porthos', 'athos', 'aramis']
+    group: Musketeers
+
+  tasks:
+    - name: Install Apache + PHP
+      apt: name={{item}} state=latest
+      loop: ['apache2', 'php', 'libapache2-mod-php', 'php-mysql']
+
+    - name: Start Apache
+      service: name=apache2 state=started # state=reloaded
+
+    - name: Create Group Musketeers
+      group: name={{group}} state=present
+
+    - name: Create user
+      user: name={{item}} state=present groups={{group}}
+      loop: "{{users}}"
+
+    - name: Create user folder in Apache Document Root
+      file: path=/var/www/html/{{item}} state=directory
+      loop: "{{users}}"
+
+    - name: Copy php files
+      tags: copy_php_files
+      copy: src=files/index.php dest=/var/www/html/{{item}} owner={{item}}
+      loop: "{{users}}"
+
+-
+  name: Docker Install + container
+  hosts: all
+  become: yes # become_user: root
+  roles:
+    - docker
+    - container
+  # tasks:
+  #   - name: Create Mariadb Container
+  #     tags: mariadb
+  #     shell: docker run --name mariadb -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=ansible mariadb

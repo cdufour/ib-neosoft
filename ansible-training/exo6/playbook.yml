@@ -1,0 +1,65 @@
+-
+  name: exo6
+  hosts: all
+  become: yes
+
+  # quid d'une utilisation de vars dans des rôles. Quelle portée ?
+
+  vars:
+    - destdir: /apps/simpleweb
+
+  tasks: 
+    - name: Add Nodejs GPG Key
+      apt_key:
+        url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+        state: present
+
+    - name: Add nodejs 14 Repo and update
+      apt_repository:
+        repo: deb https://deb.nodesource.com/node_14.x bionic main
+        update_cache: yes
+
+    - name: Install nodejs
+      apt:
+        update_cache: yes
+        name: nodejs
+        state: present
+
+    - name: Node && Npm versions
+      shell: "node -v && npm -v"
+      register: versioninfo
+
+    - name: Version Info
+      debug:
+        msg: "Version info {{ versioninfo.stdout }}"
+      when: versioninfo is changed # toDo: check idempotence
+
+    - name: Get Git Repo
+      git:
+        repo: https://github.com/cdufour/simpleweb.git
+        dest: "{{destdir}}"
+
+    - name: Change owner
+      file:
+        path: "{{destdir}}"
+        owner: vagrant
+
+    - name: Install deps with npm
+      shell: "npm install"
+      args:
+        chdir: "{{destdir}}"
+
+    # https://docs.ansible.com/ansible/latest/user_guide/playbooks_async.html
+    # https://blog.wescale.fr/2018/06/14/ansible-tips-reboot-continue/
+    - name: Start app
+      async: 10
+      poll: 0
+      shell: "node server.js > nodeserver.log 2>&1 &)"
+      args:
+        chdir: "{{destdir}}"
+
+    
+    
+      
+
+  
