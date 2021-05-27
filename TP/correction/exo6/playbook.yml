@@ -4,6 +4,7 @@
   become: yes
 
   # quid d'une utilisation de vars dans des rôles. Quelle portée ?
+  # => include_vars
 
   vars:
     - destdir: /apps/simpleweb

@@ -1,0 +1,8 @@
+** exo 6: ansible **
+Créer un playbook avec les tâches suivantes :
+- installation de nodejs version 14
+- afficher - via le module debug - les versions de node et npm installées
+- récupération du dépot git https://github.com/cdufour/simpleweb (utiliser le module git)
+- changer le propriétaire du dossier simpleweb (le owner devra être vagrant)
+- exécuter l'installation des dépendances listées dans package.json
+- démarrer l'application
